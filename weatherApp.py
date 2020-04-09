@@ -1,6 +1,7 @@
 from flask import Flask,request,render_template
 import sys
 import Adafruit_DHT
+import sqlite3
 
 app = Flask(__name__)
 app.debug = True #degugging enabled
@@ -16,6 +17,20 @@ def weatherDhtSens():
         return render_template("weatherApp.html",temp=tempVal,hum = humVal)
     else:
         return render_template("no_sensor.html")
+
+@app.route("/weather_db")
+def weatherDb():
+    conn = sqlite3.connect('/var/www/web_app/weatherApp.db')
+    curs = conn.cursor()
+    curs.execute("SELECT * FROM temperatures")
+    temperatures = curs.fetchall()
+    curs.execute("SELECT * FROM humidity")
+    humidities = curs.fetchall()
+    conn.close()
+    return render_template("weatherDb.html",temp=temperatures,hum=humidities)
+
+
+
 
 
 if __name__ == "__main__":
