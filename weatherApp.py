@@ -23,13 +23,23 @@ def weatherDb():
     conn = sqlite3.connect('/var/www/web_app/weatherApp.db')
     curs = conn.cursor()
     curs.execute("SELECT * FROM temperatures")
-    temperatures = curs.fetchall()
+    temp_vals = curs.fetchall()
     curs.execute("SELECT * FROM humidity")
-    humidities = curs.fetchall()
+    hum_vals = curs.fetchall()
     conn.close()
-    return render_template("weatherDb.html",temp=temperatures,hum=humidities)
+    return render_template("weatherDb.html",temp=temp_vals,hum=hum_vals)
 
 
+@app.route("/lab_env_db")
+def lab_env_db():
+	conn=sqlite3.connect('/var/www/web_app/weatherApp.db')
+	curs=conn.cursor()
+	curs.execute("SELECT * FROM temperatures")
+	temperatures = curs.fetchall()
+	curs.execute("SELECT * FROM humidity")
+	humidities = curs.fetchall()
+	conn.close()
+	return render_template("weatherDb.html",temp=temperatures,hum=humidities)
 
 
 
