@@ -2,6 +2,8 @@ from flask import Flask,request,render_template
 import sys
 import Adafruit_DHT
 import sqlite3
+import datetime
+import time
 
 app = Flask(__name__)
 app.debug = True #degugging enabled
@@ -18,28 +20,22 @@ def weatherDhtSens():
     else:
         return render_template("no_sensor.html")
 
-@app.route("/weather_db")
+
+@app.route("/weather_db",methods=['GET'])
 def weatherDb():
-    conn = sqlite3.connect('/var/www/web_app/weatherApp.db')
-    curs = conn.cursor()
-    curs.execute("SELECT * FROM temperatures")
-    temp_vals = curs.fetchall()
-    curs.execute("SELECT * FROM humidity")
-    hum_vals = curs.fetchall()
+    from_date_str = request.args.get('from',time.strftime("%Y-%m-%d %H:%M"))
+    to_date_str   = request.args.get('to',time.strftime("%Y-%m-%d %H:%M"))
+    conn=sqlite3.connect('/var/www/web_app/weatherApp.db')
+    curs=conn.cursor()
+    #curs.execute("SELECT * FROM temperatures")
+    curs.execute("SELECT * FROM temperatures WHERE rDateTime BETWEEN ? AND ? ", (from_date_str,to_date_str))
+    temperatures = curs.fetchall()
+    #curs.execute("SELECT * FROM humidity")
+    #humidities = curs.fetchall()
+    curs.execute("SELECT * FROM humidity WHERE rDateTime BETWEEN ? AND ? ", (from_date_str,to_date_str)) 
+    humidities = curs.fetchall()
     conn.close()
-    return render_template("weatherDb.html",temp=temp_vals,hum=hum_vals)
-
-
-@app.route("/lab_env_db")
-def lab_env_db():
-	conn=sqlite3.connect('/var/www/web_app/weatherApp.db')
-	curs=conn.cursor()
-	curs.execute("SELECT * FROM temperatures")
-	temperatures = curs.fetchall()
-	curs.execute("SELECT * FROM humidity")
-	humidities = curs.fetchall()
-	conn.close()
-	return render_template("weatherDb.html",temp=temperatures,hum=humidities)
+    return render_template("weatherDb.html",temp=temperatures,hum=humidities)
 
 
 
