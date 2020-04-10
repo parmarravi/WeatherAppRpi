@@ -25,6 +25,14 @@ def weatherDhtSens():
 def weatherDb():
     from_date_str = request.args.get('from',time.strftime("%Y-%m-%d %H:%M"))
     to_date_str   = request.args.get('to',time.strftime("%Y-%m-%d %H:%M"))
+    
+    
+    
+    if not validateDateTime(from_date_str):
+        from_date_str = time.strftime("%Y-%m-%d 00:00")
+    if not validateDateTime(to_date_str):
+        to_date_str = time.strftime("%Y-%m-%d %H %M")
+    
     conn=sqlite3.connect('/var/www/web_app/weatherApp.db')
     curs=conn.cursor()
     #curs.execute("SELECT * FROM temperatures")
@@ -38,6 +46,12 @@ def weatherDb():
     return render_template("weatherDb.html",temp=temperatures,hum=humidities)
 
 
+def validateDateTime(d):
+    try:
+        datetime.datetime.strptime(d, '%Y-%m-%d %h:%M')
+        return True
+    except ValueError:
+        return False
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=8080)
