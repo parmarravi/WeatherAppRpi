@@ -21,11 +21,9 @@ def weatherDhtSens():
         return render_template("no_sensor.html")
 
 
-@app.route("/weather_db",methods=['GET'])
-def weatherDb():
+def get_records():
     from_date_str = request.args.get('from',time.strftime("%Y-%m-%d %H:%M"))
     to_date_str   = request.args.get('to',time.strftime("%Y-%m-%d %H:%M"))
-    
     
     
     if not validateDateTime(from_date_str):
@@ -43,9 +41,37 @@ def weatherDb():
     curs.execute("SELECT * FROM humidity WHERE rDateTime BETWEEN ? AND ? ", (from_date_str,to_date_str)) 
     humidities = curs.fetchall()
     conn.close()
+    from_date_str = request.args.get('from',time.strftime("%Y-%m-%d %H:%M"))
+    to_date_str   = request.args.get('to',time.strftime("%Y-%m-%d %H:%M"))
+    
+    
+    if not validateDateTime(from_date_str):
+        from_date_str = time.strftime("%Y-%m-%d 00:00")
+    if not validateDateTime(to_date_str):
+        to_date_str = time.strftime("%Y-%m-%d %H %M")
+    
+    conn=sqlite3.connect('/var/www/web_app/weatherApp.db')
+    curs=conn.cursor()
+    #curs.execute("SELECT * FROM temperatures")
+    curs.execute("SELECT * FROM temperatures WHERE rDateTime BETWEEN ? AND ? ", (from_date_str,to_date_str))
+    temperatures = curs.fetchall()
+    #curs.execute("SELECT * FROM humidity")
+    #humidities = curs.fetchall()
+    curs.execute("SELECT * FROM humidity WHERE rDateTime BETWEEN ? AND ? ", (from_date_str,to_date_str)) 
+    humidities = curs.fetchall()
+    conn.close()
+
+    return [temperatures,humidities,from_date_str,to_date_str]
+
+
+
+
+@app.route("/weather_db",methods=['GET'])
+def weatherProcess():
+    temperatures, humidities, from_date_str, to_date_str = get_records()
+
     return render_template("weatherDb.html",temp=temperatures,hum=humidities)
-
-
+            
 def validateDateTime(d):
     try:
         datetime.datetime.strptime(d, '%Y-%m-%d %h:%M')
