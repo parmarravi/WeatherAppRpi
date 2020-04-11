@@ -26,7 +26,7 @@ def weatherDhtSens():
 def weatherProcess():
 
     temperatures, humidities, from_date_str, to_date_str = get_records()
-    return render_template("weatherDb.html",temp=temperatures,hum=humidities)
+    return render_template("weatherDb.html",temp=temperatures,hum=humidities,temp_items=len(temperatures),hum_items=len(humidities))
 
 
 
