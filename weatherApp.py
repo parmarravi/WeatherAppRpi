@@ -26,15 +26,30 @@ def weatherDhtSens():
 def weatherProcess():
 
     temperatures, humidities, from_date_str, to_date_str = get_records()
-    return render_template("weatherDb.html",temp=temperatures,hum=humidities,temp_items=len(temperatures),hum_items=len(humidities))
+   
+   
+    print("from date =",from_date_str)
+    print("to date = " ,to_date_str)
+   
+    return render_template("weatherDb.html",
+            temp=temperatures,
+            hum=humidities,
+            from_date = from_date_str,
+            to_date = to_date_str,
+            temp_items=len(temperatures),
+            hum_items=len(humidities))
 
 
 
 def get_records():
     from_date_str = request.args.get('from',time.strftime("%Y-%m-%d 00:00"))
     to_date_str   = request.args.get('to',time.strftime("%Y-%m-%d %H:%M"))
-    range_h_form = request.args.get('range_h','');
+    range_h_form = request.args.get('range_h','')
     range_h_int = "nan" # initialize this variable
+
+    print("DATE found from =", from_date_str)
+    print("TO DATE =" , to_date_str)
+
 
     try:
         range_h_int = int(range_h_form)
@@ -45,15 +60,15 @@ def get_records():
     if not validateDateTime(from_date_str):
         from_date_str = time.strftime("%Y-%m-%d 00:00")
     if not validateDateTime(to_date_str):
-        to_date_str = time.strftime("%Y-%m-%d %H %M")
+        to_date_str = time.strftime("%Y-%m-%d %H:%M")
     
 
     if isinstance(range_h_int,int):
         time_now       = datetime.datetime.now()
         time_from      = time_now - datetime.timedelta(hours = range_h_int)
         time_to        = time_now
-        from_date_str  = time_from.strftime("%Y-%m-%d %H %M")
-        to_date_str    = time_to.strftime("%Y-%m-%d %H %M")
+        from_date_str  = time_from.strftime("%Y-%m-%d %H:%M")
+        to_date_str    = time_to.strftime("%Y-%m-%d %H:%M")
 
 
 
@@ -67,13 +82,15 @@ def get_records():
     curs.execute("SELECT * FROM humidity WHERE rDateTime BETWEEN ? AND ? ", (from_date_str,to_date_str)) 
     humidities = curs.fetchall()
     conn.close()
+   
+    print("db date = " , from_date_str)
     return [temperatures,humidities,from_date_str,to_date_str]
 
 
             
 def validateDateTime(d):
     try:
-        datetime.datetime.strptime(d, '%Y-%m-%d %h:%M')
+        datetime.datetime.strptime(d, '%Y-%m-%d %H:%M')
         return True
     except ValueError:
         return False

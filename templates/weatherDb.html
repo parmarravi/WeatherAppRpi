@@ -38,7 +38,7 @@
 				     </div>           
 				   
 				     <div class="two columns">           
-				            <input class="button-primary" type="submit" value="Submit" style"position:relative; top: 28px" id="submibutton" />	
+				            <input class="button-primary" type="submit" value="Submit" style="position:relative; top: 28px" id="submit_button" />	
 				     </div>        
 
 			    </form>
@@ -124,7 +124,7 @@
 		       </div>
 	       </div>
 
-	</div>           
+	</div>          
   </body>
 
 
@@ -146,11 +146,11 @@
 					      {
 						      format:'Y-m-d H:i',
 						      defaultDate:'{{to_date}}'
-					      });
-				</script>
-				  <script>
-                                      jQuery("#range_sect input[type=radio]").click(function(){ 
+					      });			
+				 
+                                      jQuery("#range_select input[type=radio]").click(function(){ 
 	                              jQuery("#range_select").submit();
+				   
 				      });
 				  </script>
     <!-- Datetimepicker files end -->
