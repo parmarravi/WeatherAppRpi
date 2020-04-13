@@ -34,12 +34,12 @@ def weatherProcess():
 
 
     for record in temperatures:
-        local_timedate = arrorw.get(record[0],"YYYY-MM-DD HH:mm:ss").to(timezone)
+        local_timedate = arrow.get(record[0],"YYYY-MM-DD HH:mm:ss").to(timezone)
         time_adj_temperatures.append([local_timedate.format('YYYY-MM-DD HH:mm:ss'),round(record[2],2)])
    
                
     for record in humidities:
-        local_timedate = arrorw.get(record[0],"YYYY-MM-DD HH:mm:ss").to(timezone)
+        local_timedate = arrow.get(record[0],"YYYY-MM-DD HH:mm:ss").to(timezone)
         time_adj_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm:ss'),round(record[2],2)])
    
    

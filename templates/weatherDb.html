@@ -140,45 +140,48 @@
   </body>
 
 
-    <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 
-   <script src= "//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.7/jstz.min.js"></sccript>
+              <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	  
+	       <!-- Datetimepicker files start -->
+	      <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.min.css"/>
+	        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.full.min.js"></script>
+	
 
-    <!-- Datetimepicker files start -->
-    <!-- <link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css"/ > -->
-    <!-- <script src="/static/javascript/jquery.datetipicker.js"/> -->
-	        
-		  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.min.css"/ >
-		  
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.full.min.js"></script>
-			      <script>
-		
-				      
-	                             jQuery("#datetime_range" ).submit(function( event)
-					     {
-                                 	        timezone = jstz.determine();
-                                      		jQuery(".timezone").val(timezone.name());
- 				      
-					     });
+		 <!-- jstietect script start -->
+		   <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js" ></script>
 
-				      jQuery('#datetimepicker1').datetimepicker(
-					      {
-						      format:'Y-m-d H:i',
-						      defaultDate:'{{from_date}}'
-					        });
-				      jQuery('#datetimepicker2').datetimepicker(
-					      {
-						      format:'Y-m-d H:i',
-						      defaultDate:'{{to_date}}'
-					      });			
-				 
-                                      jQuery("#range_select input[type=radio]").click(function(){ 
-				      timzezone = jstz.determine();
-                                      jQuery(".timezone").val(timezone.name());
-	                              jQuery("#range_select").submit();
-				   
-				      });
-				  </script>
+		<script> 
+		jQuery( "#datetime_range" ).submit(function( event ) {
+			timezone = jstz.determine();
+			jQuery(".timezone").val(timezone.name());
+		       });
+
+                jQuery('#datetimepicker1').datetimepicker( {
+		        format:'Y-m-d H:i',
+			defaultDat:'{{from_date}}'
+	        	});
+                
+		jQuery('#datetimepicker2').datetimepicker({
+			format:'Y-m-d H:i',
+			defaultDate:'{{to_date}}'
+		});
+
+                jQuery("#range_select input[type=radio]").click(function(){
+			timezone = jstz.determine();
+			jQuery(".timezone").val(timezone.name());
+			jQuery("#range_select").submit();
+		});
+
+
+	</script>
+
+
+
+
+                      
+
+
     <!-- Datetimepicker files end -->
 
 
