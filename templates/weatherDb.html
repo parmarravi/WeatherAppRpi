@@ -25,65 +25,97 @@
     <div class="container">
 	    <div class = "row">
 		   
-			    <form id = "datetime_range" action = "/weather_db" method="GET">
+			    <form id = "datetime_range" action = "/weather_db" 
+				    method="GET">
 
 				     <div class="three columns">
 					     <label for="from">From date</label>
-					     <input class="u-full-width" id="datetimepicker1" type="text" autocomplete = "off" value="{{from_date}}" name="from">
+					     <input class="u-full-width"
+					     id="datetimepicker1"
+					     type="text"
+					     autocomplete = "off" 
+					     value="{{from_date}}" name="from">
 				     </div>        
 				     
 				     <div class="three columns">
 					     <label for="to">To date</label>          
-				             <input class="u-ull-width" id="datetimepicker2" type="text" autocomplete = "off" value="{{to_date}}" name="to">
+				             <input class="u-ull-width" 
+					     id="datetimepicker2" 
+					     type="text"
+					     autocomplete = "off" 
+					     value="{{to_date}}" name="to">
 				     </div>           
 				   
 				     <div class="two columns"> 
-					    <input type = "hidden" class = "timezone"  name = "timezone" />
-				            <input class="button-primary" type="submit" value="Submit" style="position:relative; top: 28px" id="submit_button" />	
+					    <input type = "hidden" 
+					    class = "timezone"
+					    name = "timezone" />
+				            <input class="button-primary" 
+					    type="submit"
+					    value="Submit"
+					    style="position:relative; top: 28px"
+					    id="submit_button" />	
 				     </div>        
 
 			    </form>
 	    </div>
 
-	      <!-- Datetimepicker form end -->
-	            <div class ="row">
-			          <div class ="eleven columns">
 
+
+
+           <div class="row">
+		      <div class="eleven columns">
+		            	<div class="one column">
+				           	
 					<div class="one column">
-						<div class ="one column">							
-					                <a href="" id="plotly" style="position:relative;top:15px">Plotly</a>
-				    		</div>
-					               <a href="/weather" style="position:relative;top:15px">Current</a>
-					 </div>
-		                       
+							     			 
+						<a href="" id="plotly" style="position:relative;top:15px">Plotly</a>
+						
+					</div>
+					
+					<a href="/weather" style="position:relative;top:15px">Current</a>
+					
+				</div>
+				
+				<form id="range_select" action = "/weather_db" method="GET">
+				
+					<input type="hidden" class="timezone" name="timezone" />
+					
+					<div clas="one column">
+																					                                               <input type="radio" name="range_h" value="3" id="radio_3" /><label for="radio_3">3hrs</label>
+																							                                </div>
+			
+																								  <div class="one column">
+																								
+																									  <input type="radio" name="range_h" value="6" id="radio_6" /><label for="radio_6">6hrs</label>
+																									
+																								  </div>
+																								
+																								  <div class="one column">
+																								
+																									  <input type="radio" name="range_h" value="12" id="radio_12" /><label for="radio_12">12hrs</label>
+																									
+																								  </div>
+																								
+																								  <div class="one column">  
+																									  <input type="radio" name="range_h" value="24" id="radio_24" /><label for="radio_24">24hrs</label>
+																								
+																								  </div>
+																									
+				</form>
+				
+		      </div>
+		
+	   </div>
+	
+	   <div class="row">
+	
+		   <a href="" id="plotly_url" target="_blank"></a><span id="plotly_wait"></span>
+		
+	   </div>
 
-					  <form id = "range_select" action = "/weather_db" method="GET">       
 
-						  <input type = "hidden" class = "timezone" name = "timezone"/>
 
-						  <div class="one column">
-							  <input type ="radio" name="range_h" value="3" id="radio_3" />
-							  <label for="radio_3">3hrs</label>
-						  </div>
-
-						  <div class="one column">
-							  <input type ="radio" name="range_h" value="6" id="radio_6" />
-							  <label for="radio_6">6hrs</label>
-						  </div>
-						  
-						  <div class="one column">
-							  <input type = "radio" name="range_h" value="12" id="radio_12" />
-							  <label for="radio_12">12hrs</label>
-						  </div>	
-						  
-						  <div class="one column">
-							  <input type ="radio" name="range_h" value="24" id="radio_24" />
-							  <label for="radio_24">24hrs</label>
-						  </div>
-					  </form>          
-				  </div>
-		    </div>
-	    
 	<div class="row">
         <div class="one-third column" style="margin-top: 5%">
           <strong>Showing all records</strong>                
@@ -141,15 +173,19 @@
 
 
 
-              <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	  
+        <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+	 
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+			
 	       <!-- Datetimepicker files start -->
-	      <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.min.css"/>
+      <link rel="stylesheet" 
+	    type="text/css" 
+            href="//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.min.css"/>
 	        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.full.min.js"></script>
 	
 
 		 <!-- jstietect script start -->
-		   <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js" ></script>
+		 <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js" ></script>
 
 		<script> 
 		jQuery( "#datetime_range" ).submit(function( event ) {
@@ -173,18 +209,27 @@
 			jQuery("#range_select").submit();
 		});
 
+               jQuery("#plotlty").click(function(){
+	        
+		    jQuery("#plotly_wait").text("Sending data ....");
+		    jQuery("#plotly_url").text("");
+
+		    jQuery.get("/to_plotly",{from:"{{from_date}}",
+			    to:"{{to_date}}",timezone:"{{timezone}}"})
+			      .done(function(data){
+
+                       jQuery("#plotly_url").attr("href",data);
+		       jQuery("#plotly_wait").text("");
+		       jQuery("#plotly_url").text("click to see your plot");		       
+	       
+                 	       });
+		       return false;
+	       });
+
 
 	</script>
 
-
-
-
-                      
-
-
     <!-- Datetimepicker files end -->
-
-
 
   <!-- Google Charts JS start -->
    

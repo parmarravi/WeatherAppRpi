@@ -5,6 +5,10 @@ import sqlite3
 import datetime
 import time
 import arrow
+import plotly.plotly as py
+from plotly.graph_objs import *
+
+
 
 app = Flask(__name__)
 app.debug = True #degugging enabled
@@ -46,13 +50,72 @@ def weatherProcess():
     # print("from date =",from_date_str)
     #print("to date = " ,to_date_str)
    
-    return render_template("weatherDb.html",timezone = timezone, temp=time_adj_temperatures,
+    return render_template("rpi_webDb.html",timezone = timezone, temp=time_adj_temperatures,
             hum=time_adj_humidities,
             from_date = from_date_str,
             to_date = to_date_str,
             temp_items=len(temperatures),
             query_string= request.query_string, #This query string is used
             hum_items=len(humidities))
+
+
+@app.route("/to_plotly",methods=['GET'])
+def sendPlotlyUrl():
+
+
+    temperatures,humidities,timezone,from_date_str,to_date_str = get_records()
+    time_adj_temperatures = []
+    time_adj_humidities = []
+    time_temp_values=[]
+    time_hum_values=[]
+
+    print("to_plot")
+    
+    print("from date =",from_date_str)
+    print("to date = " ,to_date_str)
+    print("timezone = ",timezone)
+
+    for record in temperatures:
+        local_timedate = arrow.get(record[0],"YYYY-MM-DD HH:mm:ss").to(timezone)
+        time_adj_temperatures.append(local_timedate.format('YYYY-MM-DD HH:mm:ss'))
+        time_temp_values.append(round(record[2],2))
+   
+
+    for record in humidities:
+        local_timedate = arrow.get(record[0],"YYYY-MM-DD HH:mm:ss").to(timezone)
+        time_adj_humidities.append(local_timedate.format('YYYY-MM-DD HH:mm:ss'))
+        time_hum_values.append(round(record[2],2))
+
+
+    temp = Scatter(x= time_adj_temperatures,y=time_temp_values,name='Temperature')
+   
+    hum  = Scatter(x=time_adj_humidities,y=time_hum_values,name='Humidity',yaxis = 'y2')
+
+
+    data = Data([temp,hum])
+
+
+    layout = Layout(title = "Weather Monitor By Ravi P",
+            xaxis = XAxis(type = 'date' ,autorange = True),
+            yaxis = YAxis(title = 'Celcius',type = 'linear' ,autorange = True),
+            yaxis2 = YAxis(
+                title = 'Percent',
+                type ='linear',
+                autorange = True,
+                overlaying ='y',
+                side = 'right')
+            )
+    fig = Figure(data = data,layout=layout)
+    plotUrl=py.plot(fig,filename = 'weatherMonitor')
+    
+    print("ploturl",plotUrl)
+
+    return plotUrl
+
+
+
+
+
 
 
 
@@ -66,11 +129,14 @@ def get_records():
     #print("DATE found from =", from_date_str)
     #print("TO DATE =" , to_date_str)
     print(request.args)
+    print ("from: %s, to: %s, timezone: %s" % (from_date_str, to_date_str, timezone))
 
     try:
         range_h_int = int(range_h_form)
     except:
         print("range_h_form not a number")
+
+    print ("Received from browser: %s, %s, %s, %s" % (from_date_str, to_date_str, timezone, range_h_int))
 
 
     if not validateDateTime(from_date_str):
@@ -78,6 +144,9 @@ def get_records():
     if not validateDateTime(to_date_str):
         to_date_str = time.strftime("%Y-%m-%d %H:%M")
     
+    print ('2. From: %s, to: %s, timezone: %s' % (from_date_str,to_date_str,timezone))
+
+
     #create datetime object so that we can convert to UTC from the browser's local time
      
     from_date_obj = datetime.datetime.strptime(from_date_str,'%Y-%m-%d %H:%M')
